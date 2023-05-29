@@ -19,7 +19,7 @@ describe("discriminator keyword", function () {
   })
 
   function getAjvs(AjvClass: typeof AjvCore) {
-    return withStandalone(getAjvInstances(AjvClass, options, {discriminator: true}))
+    return withStandalone(getAjvInstances(AjvClass, options, {discriminator: {strict: false}}))
   }
 
   describe("validation", () => {
@@ -159,6 +159,7 @@ describe("discriminator keyword", function () {
     })
   })
 
+<<<<<<< HEAD
   describe("validation with referenced schemas and allOf", () => {
     const definitions = {
       baseObject: {
@@ -167,6 +168,10 @@ describe("discriminator keyword", function () {
         },
         required: ["base"],
       },
+=======
+  describe("validation with referenced schemas and mapping", () => {
+    const definitions1 = {
+>>>>>>> 0980a570e56e12c3b7ca27b260d9b121ef0160ac
       schema1: {
         properties: {
           foo: {const: "x"},
@@ -176,11 +181,16 @@ describe("discriminator keyword", function () {
       },
       schema2: {
         properties: {
+<<<<<<< HEAD
           foo: {enum: ["y", "w"]},
+=======
+          foo: {enum: ["y", "z"]},
+>>>>>>> 0980a570e56e12c3b7ca27b260d9b121ef0160ac
           b: {type: "string"},
         },
         required: ["foo", "b"],
       },
+<<<<<<< HEAD
       schema1Object: {
         allOf: [
           {
@@ -219,21 +229,52 @@ describe("discriminator keyword", function () {
             c: {type: "string"},
           },
           required: ["base", "foo", "c"],
+=======
+    }
+    const mainSchema1 = {
+      type: "object",
+      discriminator: {
+        propertyName: "foo",
+        mapping: {
+          x: "#/definitions/schema1",
+          z: "#/definitions/schema2",
+        },
+      },
+      oneOf: [
+        {
+          $ref: "#/definitions/schema1",
+        },
+        {
+          $ref: "#/definitions/schema2",
+>>>>>>> 0980a570e56e12c3b7ca27b260d9b121ef0160ac
         },
       ],
     }
 
+<<<<<<< HEAD
     const schema = [{definitions: definitions, ...mainSchema}]
 
     it("should validate data", () => {
       assertValid(schema, {foo: "x", a: "a", base: "base"})
       assertValid(schema, {foo: "y", b: "b", base: "base"})
       assertValid(schema, {foo: "z", c: "c", base: "base"})
+=======
+    const schema = [{definitions: definitions1, ...mainSchema1}]
+
+    it("should validate data", () => {
+      assertValid(schema, {foo: "x", a: "a"})
+      assertValid(schema, {foo: "y", b: "b"})
+      assertValid(schema, {foo: "z", b: "b"})
+>>>>>>> 0980a570e56e12c3b7ca27b260d9b121ef0160ac
       assertInvalid(schema, {})
       assertInvalid(schema, {foo: 1})
       assertInvalid(schema, {foo: "bar"})
       assertInvalid(schema, {foo: "x", b: "b"})
       assertInvalid(schema, {foo: "y", a: "a"})
+<<<<<<< HEAD
+=======
+      assertInvalid(schema, {foo: "z", a: "a"})
+>>>>>>> 0980a570e56e12c3b7ca27b260d9b121ef0160ac
     })
   })
 
